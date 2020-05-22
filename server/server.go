@@ -31,7 +31,7 @@ func (s *server) Hello(helloReq *proto.HelloRequest, srv proto.GreetService_Hell
 }
 
 func main() {
-	serverAdr := ":50501"
+	serverAdr := ":5000"
 	listenAddr, err := net.Listen("tcp", serverAdr)
 	if err != nil {
 		logrus.Fatalf("Error while starting the listening service %v", err.Error())
