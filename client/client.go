@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	serverAddr := ":50501"
+	serverAddr := ":5000"
 	conn, err := grpc.Dial(serverAddr, grpc.WithInsecure())
 	if err != nil {
 		logrus.Fatalf("Couldn't dial server at %s", serverAddr)
