@@ -1,11 +1,13 @@
-FROM golang:alpine3.11 as build
-RUN mkdir -p /usr/local/src
-COPY . /usr/local/src
+FROM golang:1.14 as builder
 WORKDIR /usr/local/src/
-#RUN cd server && go build .
-#RUN cd server && env CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -a --installsuffix cgo -v -tags netgo -ldflags '-extldflags "-static"' .
-RUN cd server && go build .
+COPY . ./
+RUN CGO_ENABLED=0 go build -o ./hello-server ./server
+# Not building the client program
 RUN GRPC_HEALTH_PROBE_VERSION=v0.3.2 && \
     wget -qO/bin/grpc_health_probe https://github.com/grpc-ecosystem/grpc-health-probe/releases/download/${GRPC_HEALTH_PROBE_VERSION}/grpc_health_probe-linux-amd64 && \
     chmod +x /bin/grpc_health_probe
-CMD ./server/server
+
+FROM gcr.io/distroless/static
+COPY --from=builder /usr/local/src/hello-server /hello-server
+COPY --from=builder /bin/grpc_health_probe ./grpc_health_probe
+CMD ["/hello-server"]
