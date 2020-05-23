@@ -25,7 +25,7 @@ func (s *server) Hello(helloReq *proto.HelloRequest, srv proto.GreetService_Hell
 		resp := &proto.HelloResponse{
 			Greet: fmt.Sprintf("Hello %s for %d time",helloReq.Hello, i),
 		}
-		srv.Send(resp)
+		srv.SendMsg(resp)
 	}
 	return nil
 }
